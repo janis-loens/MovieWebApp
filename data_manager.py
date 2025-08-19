@@ -23,7 +23,7 @@ class DataManager():
         return User.query.all()
     
     def update_movie(self, movie_id, new_title):
-        movie = Movie.query.filter_by(movie_id=movie_id).one()
+        movie = Movie.query.filter_by(id=movie_id).one()
         if movie:
             movie.title = new_title
             self.db.session.commit()

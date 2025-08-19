@@ -38,7 +38,7 @@ def get_user_movies(user_id):
     if request.method == 'POST':
         title = request.form.get('title')
         movie_data = get_movie_data(title)
-        if movie_data:
+        if "Title" in movie_data:
             data_manager.add_movie(
                 title=movie_data["Title"],
                 year=movie_data["Year"],

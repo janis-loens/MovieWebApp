@@ -1,43 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Web App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>Welcome to the Movie Web App</h1>
-    </header>
-    <main>
-        <!-- User selection form -->
-        <form action="{{ url_for('select_user') }}" method="post">
-            <fieldset>
-                <legend>Choose your profile:</legend>
-                {% if users|length == 0 %}
-                    <p>No users found. Please create a user first.</p>
-                {% else %}
-                    {% for user in users %}
-                        <div>
-                            <input type="radio" id="user_{{ loop.index }}" name="user_id" value="{{ user.id }}" {% if loop.first %}checked{% endif %}>
-                            <label for="user_{{ loop.index }}">{{ user.username }}</label>
-                        </div>
-                    {% endfor %}
-                    <button type="submit">Select User</button>
-                {% endif %}
-            </fieldset>
-        </form>
+{% extends "base.html" %}
 
-        <!-- Add new user form -->
-        <form action="{{ url_for('add_user') }}" method="post">
-            <fieldset>
-                <legend>Create a new profile:</legend>
-                <input type="text" name="username" placeholder="Enter your username" required>
-                <input type="email" name="email" placeholder="Enter your email" required>
-                <button type="submit">Add User</button>
-            </fieldset>
-        </form>
-    </main>
-</body>
-</html>
+{% block content %}
+<main>
+    <h2>Select a User</h2>
+    <div class="card-list">
+        {% if users %}
+            {% for user in users %}
+                <div class="card">
+                    <h3>{{ user.username }}</h3>
+                    <form method="POST" action="{{ url_for('select_user') }}">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <button type="submit">Select</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align:center;">No users available. Please add one below.</p>
+        {% endif %}
+    </div>
+
+    <h3 style="margin-top: 40px; text-align:center;">Add a New User</h3>
+    <form method="POST" action="{{ url_for('add_user') }}" style="text-align:center;">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="email" placeholder="Email" required>
+        <button type="submit">Add User</button>
+    </form>
+</main>
+{% endblock %}
